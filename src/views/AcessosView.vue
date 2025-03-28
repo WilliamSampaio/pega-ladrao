@@ -152,7 +152,7 @@ async function getFotos(comprovanteId) {
         <h2>Acessos</h2>
         <h3 style="color: red;">{{ data.expiracaoContagem }}</h3>
         <hr>
-        <div class="accordion" id="accordionFlush">
+        <div class="accordion mb-3" id="accordionFlush">
             <div v-for="(acesso, index) in data.acessos" class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
