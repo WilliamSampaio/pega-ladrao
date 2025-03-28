@@ -26,4 +26,6 @@ Nesta página voce vai poder copiar o link do comprovante gerado para poder envi
 <img src="./prints/4.png" style="width:150px;"/>
 <img src="./prints/5.png" style="width:150px;"/>
 
-Devido o tempo corrido só fiz os modelos de comprovante, do banco Bradesco e do Next. Se você deseja contribuir desenvolvendo algum, ou ajudando na documentação, correção de Bugs ou de qualquer outra forma sinta-se livre para enviar um pull request ou abrir uma issue.
+## Contribuição
+
+Devido o tempo corrido só fiz os modelos de comprovante, do banco Bradesco e do Next. Se você deseja contribuir desenvolvendo algum, ou ajudando na documentação, correção de Bugs, ideias ou de qualquer outra forma sinta-se livre para enviar um pull request ou abrir uma issue.
