@@ -20,7 +20,6 @@ const data = reactive({
     acessos: [],
     fotos: [],
     expiracaoContagem: '',
-    expirado: false
 });
 
 onBeforeMount(() => {
@@ -40,8 +39,14 @@ onMounted(async () => {
         appStore.loadingToggle();
         return;
     } else {
-        data.comprovante = docSnap.data();
-        data.comprovante.id = docSnap.id;
+        if (docSnap.data().expiracao.toDate() > (new Date)) {
+            data.comprovante = docSnap.data();
+            data.comprovante.id = docSnap.id;
+        } else {
+            appStore.loadingToggle();
+            data.alert = alertMessage('danger', 'Comprovante não existe!');
+            return;
+        }
     }
 
     await getFotos(route.query.id);
@@ -61,7 +66,7 @@ onMounted(async () => {
 
         if (distance < 0) {
             clearInterval(x);
-            data.expirado = true;
+            data.comprovante = null;
             data.expiracaoContagem = 'Comprovante Expirado!';
         }
     }, 1000)
@@ -128,7 +133,7 @@ async function getFotos(comprovanteId) {
                 aria-label="Close"></button>
         </div>
 
-        <div v-if="!data.expirado" class="alert alert-success text-center" role="alert">
+        <div v-if="data.comprovante" class="alert alert-success text-center" role="alert">
             <h4 class="alert-heading" style="font-weight: bold;">
                 🎉 Comprovante gerado com sucesso! 🎉
             </h4>
