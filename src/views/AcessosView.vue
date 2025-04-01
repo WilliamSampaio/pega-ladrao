@@ -194,7 +194,7 @@ async function getFotos(comprovanteId) {
                                 frameborder="1" style="width: 100%; height: 300px;"></iframe>
                         </p>
                         <div v-else class="alert alert-danger text-center" role="alert">
-                            Permissão não concedida!
+                            Permissão de localização foi negada.
                         </div>
                         <h5 v-if="data.fotos[acesso.id] !== undefined" class="text-center">Fotos</h5>
                         <div v-if="data.fotos[acesso.id] !== undefined" id="carouselFotos" class="carousel slide"
