@@ -17,6 +17,7 @@ Este diretorio organiza o desenvolvimento por specs pequenas e verificaveis.
 | `0001-hardening-seguranca.md` | Planejada | Corrigir seguranca, privacidade, Firebase Rules e vulnerabilidades. |
 | `0002-restaurar-funcionamento.md` | Planejada | Tornar o projeto funcional novamente. |
 | `0003-documentacao-simples.md` | Planejada | Simplificar documentacao para usuarios e mantenedores. |
+| `0004-cloud-functions-agendada.md` | Planejada | Remover comprovantes expirados, acessos e capturas por rotina agendada. |
 
 ## Padrao Minimo
 

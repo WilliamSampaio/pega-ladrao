@@ -12,6 +12,13 @@
                 por meio do seu contato, está tentando extorquir dinheiro de você de alguma forma. Gere um comprovante
                 temporário para registrar acessos ao link. O projeto não deve ser usado para coletar dados sensíveis sem
                 base legal ou consentimento.
+                <hr>
+                <p class="mb-0">
+                    Código-fonte e instruções para desenvolvedores:
+                    <a href="https://github.com/WilliamSampaio/pega-ladrao" target="_blank" rel="noopener noreferrer">
+                        github.com/WilliamSampaio/pega-ladrao
+                    </a>
+                </p>
             </div>
         </div>
 

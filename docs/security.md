@@ -15,6 +15,16 @@ O projeto usa Firebase diretamente no cliente. Por isso, a seguranca depende pri
 - Fotos sao gravadas em capturas/{ownerUid}/{comprovanteId}/{acessoId}/{imgId}; a leitura fica restrita ao ownerUid autenticado.
 - Leitura publica ampla do Storage foi removida.
 - Updates e deletes pelo cliente foram bloqueados para comprovantes, acessos e capturas.
+- Uma Cloud Function agendada remove dados expirados pelo backend usando Firebase Admin SDK, sem depender de permissoes do cliente.
+
+## Retencao E Limpeza Agendada
+
+- Comprovantes continuam sendo criados com o tempo de expiracao definido no cliente.
+- A limpeza considera expirado todo comprovante com expiracao menor ou igual ao horario da execucao.
+- A function `limparDadosExpirados` roda diariamente as 03:00 no timezone `America/Manaus`.
+- A ordem de remocao e: capturas em `capturas/{ownerUid}/{comprovanteId}/`, acessos vinculados ao `comprovanteId` e, por ultimo, o comprovante.
+- A execucao inicial processa ate 100 comprovantes expirados por vez. Reexecucoes sao idempotentes para tolerar arquivos ou documentos ja removidos.
+- Os logs registram quantos comprovantes, acessos e arquivos foram removidos, alem de erros por item quando houver falha parcial.
 
 ## Limitacoes
 
@@ -22,12 +32,15 @@ O projeto usa Firebase diretamente no cliente. Por isso, a seguranca depende pri
 - Sem backend proprio, o link publico ainda precisa conseguir ler um comprovante valido para renderizar /transacao.
 - O registro de evidencias sensiveis depende das permissoes do navegador e da acao explicita do visitante.
 - Regras do Firebase devem ser publicadas junto com a aplicacao; mudar apenas o codigo local nao protege um ambiente ja publicado.
+- Cloud Functions e Cloud Scheduler podem exigir servicos habilitados no projeto Firebase e podem gerar custo operacional conforme o plano e a quantidade de execucoes.
 
 ## Verificacao Recomendada
 
 - npm audit
 - npm run build
 - npm run test:rules
+- npm --prefix functions test
+- npm --prefix functions run check
 - Testar criacao de comprovante.
 - Testar leitura de /acessos?id=... no mesmo navegador.
 - Testar bloqueio de /acessos?id=... em navegador anonimo diferente.

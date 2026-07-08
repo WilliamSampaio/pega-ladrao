@@ -12,12 +12,12 @@ Use esta seção se você só quer usar a aplicação já publicada no Firebase 
 
 ### Endereços
 
-- Gerar e acompanhar comprovantes: https://pega-ladrao-d9d04.web.app/_gerar
-- Link base do comprovante enviado ao destinatário: https://comprovante-br-gov-bcb-pix-cdba8.web.app
+- Gerar e acompanhar comprovantes: <https://pega-ladrao-d9d04.web.app/_gerar>
+- Link base do comprovante enviado ao destinatário: <https://comprovante-br-gov-bcb-pix-cdba8.web.app>
 
 ### Passo A Passo
 
-1. Acesse https://pega-ladrao-d9d04.web.app/_gerar.
+1. Acesse <https://pega-ladrao-d9d04.web.app/_gerar>.
 
    <img src="./prints/1.png" style="width:150px;" alt="Tela inicial para gerar comprovante"/>
    <img src="./prints/2.png" style="width:150px;" alt="Formulário de geração do comprovante"/>
@@ -45,7 +45,7 @@ Use esta seção se você quer rodar localmente ou publicar sua própria instân
 
 - Node.js 22 ou compatível.
 - NPM.
-- Projeto Firebase com Firestore, Storage, Hosting e Authentication Anonymous habilitados.
+- Projeto Firebase com Firestore, Storage, Hosting, Authentication Anonymous, Cloud Functions e Cloud Scheduler habilitados.
 - Java disponível para executar os emuladores Firebase em `npm run test:rules`.
 
 ### Configuração Local
@@ -81,6 +81,8 @@ Não commite `.env.local`.
 - `npm run preview`: serve o build localmente.
 - `npm run test:rules`: valida Firestore e Storage Rules no Firebase Emulator.
 - `npm audit`: verifica vulnerabilidades de dependências.
+- `npm --prefix functions test`: valida a rotina local de limpeza de dados expirados.
+- `npm --prefix functions run check`: verifica sintaxe dos arquivos da Cloud Function.
 
 ### Firebase
 
@@ -90,6 +92,13 @@ Arquivos importantes:
 - `firestore.rules`
 - `firestore.indexes.json`
 - `storage.rules`
+- `functions/`
+
+### Limpeza Agendada
+
+A Cloud Function `limparDadosExpirados` roda diariamente as 03:00 no timezone `America/Manaus`. Ela usa Firebase Admin SDK para remover, em lotes de ate 100 comprovantes por execucao, dados com `expiracao <= now`: primeiro capturas em `capturas/{ownerUid}/{comprovanteId}/`, depois acessos da colecao `acessos` vinculados ao comprovante e, por ultimo, o documento em `comprovantes`.
+
+A rotina nao altera o fluxo do cliente nem amplia Firestore Rules ou Storage Rules. Para publicar, o projeto Firebase precisa ter Cloud Functions e Cloud Scheduler habilitados; esses servicos podem gerar custo conforme o plano e o volume de execucoes.
 
 Antes de publicar, rode:
 
@@ -97,12 +106,20 @@ Antes de publicar, rode:
 npm run build
 npm audit
 npm run test:rules
+npm --prefix functions test
+npm --prefix functions run check
 ```
 
 Publique regras, índices e hosting conforme seu projeto Firebase:
 
 ```bash
 npx firebase-tools deploy --only firestore:rules,firestore:indexes,storage,hosting
+```
+
+Publique somente a function agendada depois da validacao local:
+
+```bash
+npx firebase-tools deploy --only functions:limparDadosExpirados
 ```
 
 ### Segurança E SDD
