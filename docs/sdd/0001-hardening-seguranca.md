@@ -73,4 +73,3 @@ O projeto possui riscos de seguranca e privacidade que impedem uso responsavel e
 
 - Risco: O modelo atual pode nao permitir controle de acesso adequado apenas no cliente.
 - Mitigacao: Avaliar autenticacao, links com token ou backend intermediario.
-

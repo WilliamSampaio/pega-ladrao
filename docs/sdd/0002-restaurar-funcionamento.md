@@ -67,4 +67,3 @@ O projeto compila apos reinstalar dependencias, mas o funcionamento em Firebase 
 
 - Risco: Correcoes de seguranca podem exigir mudancas no fluxo funcional.
 - Mitigacao: Executar esta spec junto ou logo apos `0001-hardening-seguranca.md`.
-

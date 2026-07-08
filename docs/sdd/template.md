@@ -49,4 +49,3 @@ Descreva o problema que precisa ser resolvido.
 ## Notas
 
 - Decisoes, links internos ou pendencias relevantes.
-

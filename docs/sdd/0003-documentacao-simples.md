@@ -61,4 +61,3 @@ O README atual explica o contexto do projeto, mas nao e suficiente como guia sim
 
 - Risco: Simplificar demais pode esconder detalhes importantes de seguranca.
 - Mitigacao: Manter README curto e apontar para documentos tecnicos em `docs/`.
-

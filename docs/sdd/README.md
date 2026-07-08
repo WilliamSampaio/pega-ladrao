@@ -32,4 +32,3 @@ Cada spec deve conter:
 - Riscos.
 
 Use `template.md` como base.
-
