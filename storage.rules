@@ -1,18 +1,29 @@
 rules_version = '2';
 
-// Craft rules based on data in your Firestore database
-// allow write: if firestore.get(
-//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
 service firebase.storage {
   match /b/{bucket}/o {
-    match /capturas/{comprovanteId}/{acessoId}/{imgId} {
-      allow create: if request.resource.size < 100 * 1024
-        && request.resource.contentType.matches('image/jpeg');
-      allow delete, update: if false;
-      allow read: if true;
+    function isSignedIn() {
+      return request.auth != null;
     }
+
+    match /capturas/{ownerUid}/{comprovanteId}/{acessoId}/{imgId} {
+      allow create: if request.resource.size < 750 * 1024
+        && request.resource.contentType.matches('image/jpeg');
+      allow update, delete: if false;
+    }
+
+    match /capturas/{ownerUid} {
+      allow get, list: if isSignedIn() && request.auth.uid == ownerUid;
+      allow write: if false;
+    }
+
+    match /capturas/{ownerUid}/{allPaths=**} {
+      allow get, list: if isSignedIn() && request.auth.uid == ownerUid;
+      allow write: if false;
+    }
+
     match /{allPaths=**} {
-      allow read: if true;
+      allow read, write: if false;
     }
   }
 }

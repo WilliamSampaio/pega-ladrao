@@ -14,34 +14,19 @@ function delay(ms) {
     return new Promise(res => setTimeout(res, ms));
 }
 
-// function notificationPermissionIsGranted() {
-//     return Notification.permission === 'granted';
-// }
-
-// async function requestNotificationPermission() {
-//     if (!notificationPermissionIsGranted()) {
-//         await Notification.requestPermission()
-//             .then(permission => {
-//                 if (permission !== 'granted') {
-//                     console.error('Ops! Você não concedeu permissão de notificação, pode ser que alguns recursos não funcionem adequadamente.');
-//                 }
-//             });
-//     }
-// }
-
 async function requestCameraPermission(videoElement) {
-    await navigator.mediaDevices.getUserMedia({ video: true })
-        .then((stream) => {
-            videoElement.srcObject = stream;
-        })
-        .catch((error) => {
-            console.error("Error accessing the camera: ", error);
-        });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    videoElement.srcObject = stream;
+    return stream;
 }
 
 async function getCurrentPosition() {
     const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
+        });
     });
 
     return position.coords.toJSON();
@@ -91,8 +76,6 @@ export {
     copyToClipboard,
     alertMessage,
     delay,
-    // notificationPermissionIsGranted,
-    // requestNotificationPermission,
     requestCameraPermission,
     getCurrentPosition,
     maskCpf,

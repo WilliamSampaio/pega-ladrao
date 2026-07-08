@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:rules": "npx firebase-tools@15.22.4 emulators:exec --only firestore,storage \"node scripts/test-firebase-rules.mjs\""
   },
   "dependencies": {
     "@capacitor/core": "^7.1.0",
-    "@capacitor/device": "^7.0.0",
+    "@capacitor/device": "^7.0.5",
     "firebase": "^11.4.0",
     "maska": "^3.1.1",
     "pinia": "^3.0.1",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^7.1.0",
+    "@firebase/rules-unit-testing": "^4.0.1",
     "@vitejs/plugin-vue": "^5.2.1",
     "vite": "^6.2.0"
   }

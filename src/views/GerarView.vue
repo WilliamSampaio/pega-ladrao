@@ -4,14 +4,14 @@
         <h1>Gerar Comprovante</h1>
         <hr>
         <div class="alert alert-warning" role="alert">
-            <b>Atenção! Não me responsabilizo por mau uso deste software.</b>
+            <b>Atenção!</b> Use apenas em situações legítimas, respeitando consentimento, privacidade e legislação aplicável. O mau uso deste software é responsabilidade de quem o opera.
         </div>
         <div class="card mb-3">
             <div class="card-body card-text">
                 Se você chegou até aqui, provavelmente é porque você é vítima de algum tipo de tentativa de fraude que,
-                por meio do seu contato, está tentando extorquir dinheiro de você de alguma forma. Gere recibos falsos
-                do Pix e envie para eles. Se eles acessarem o link (e concederem permissões), você poderá acessar
-                diversas informações sobre o dispositivo deles, IP, localização e até fotos! 🚀
+                por meio do seu contato, está tentando extorquir dinheiro de você de alguma forma. Gere um comprovante
+                temporário para registrar acessos ao link. O projeto não deve ser usado para coletar dados sensíveis sem
+                base legal ou consentimento.
             </div>
         </div>
 
@@ -97,7 +97,7 @@
                     </div>
                     <div class="mb-3 d-flex justify-content-around">
                         <button type="submit" class="btn btn-primary btn-lg">Gerar 💥</button>
-                        <button @click="limpar" class="btn btn-warning btn-lg">Limpar</button>
+                        <button type="button" @click="limpar" class="btn btn-warning btn-lg">Limpar</button>
                     </div>
                 </form>
             </div>
@@ -114,6 +114,7 @@ import { maskCpf } from "../functions";
 import { doc, setDoc, Timestamp, collection } from 'firebase/firestore';
 import { firestore } from "../firebase";
 import { useRouter } from "vue-router";
+import { ensureAnonymousUser } from "../auth";
 
 const router = useRouter();
 
@@ -139,6 +140,16 @@ const appStore = useAppStore();
 async function gerar() {
     appStore.loadingToggle();
 
+    let user;
+    try {
+        user = await ensureAnonymousUser();
+    } catch (error) {
+        alert('Erro ao autenticar no Firebase. Verifique se o provedor Anonymous está habilitado.');
+        console.error('Erro de autenticação:', error);
+        appStore.loadingToggle();
+        return;
+    }
+
     const formData = { ...data }
 
     formData.cpfPagador = maskCpf(formData.cpfPagador);
@@ -154,23 +165,26 @@ async function gerar() {
 
     formData.nomePagador = formData.nomePagador.toUpperCase().replace(/[^A-Z^' ']+/g, "");
 
-    if (formData.valor == 0) {
+    formData.valor = Number(formData.valor);
+
+    if (!Number.isFinite(formData.valor) || formData.valor <= 0) {
         formData.valor = 0.01
     }
 
     formData.nomePilantra = formData.nomePilantra.toUpperCase().replace(/[^A-Z^' ']+/g, "");
+    formData.ownerUid = user.uid;
 
     try {
         const ref = doc(collection(firestore, "comprovantes"));
         await setDoc(ref, formData);
         comprovanteId.value = ref.id;
+        router.push({ name: 'acessos', query: { id: comprovanteId.value } });
     } catch (error) {
-        alert('Erro! ' + String(error));
+        alert('Erro ao gerar comprovante. Verifique a configuração do Firebase e as regras publicadas.');
+        console.error('Erro ao gerar comprovante:', error);
     } finally {
         appStore.loadingToggle();
     }
-
-    router.push({ name: 'acessos', query: { id: comprovanteId.value } });
 }
 
 function limpar() {

@@ -2,7 +2,7 @@
 
 ## Status
 
-Planejada
+Implementada
 
 ## Problema
 
@@ -73,3 +73,9 @@ O projeto possui riscos de seguranca e privacidade que impedem uso responsavel e
 
 - Risco: O modelo atual pode nao permitir controle de acesso adequado apenas no cliente.
 - Mitigacao: Avaliar autenticacao, links com token ou backend intermediario.
+
+## Notas De Implementacao
+
+- Implementacao inicial registrada em docs/security.md.
+- O fluxo publico foi reduzido para registrar apenas comprovanteId e at.
+- A coleta automatica silenciosa foi substituida por registro minimo de acesso e registro explicito de evidencias sensiveis acionado pelo visitante.

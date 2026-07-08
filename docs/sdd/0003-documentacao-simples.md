@@ -2,7 +2,7 @@
 
 ## Status
 
-Planejada
+Implementada
 
 ## Problema
 
@@ -61,3 +61,10 @@ O README atual explica o contexto do projeto, mas nao e suficiente como guia sim
 
 - Risco: Simplificar demais pode esconder detalhes importantes de seguranca.
 - Mitigacao: Manter README curto e apontar para documentos tecnicos em `docs/`.
+
+## Notas De Implementacao
+
+- README reescrito com objetivo, requisitos, configuracao, comandos, fluxo de uso, Firebase, SDD e troubleshooting.
+- Variaveis documentadas a partir de .env.example sem expor valores locais.
+- Comandos conferidos contra package.json.
+- Links para docs/security.md e docs/sdd/ adicionados.

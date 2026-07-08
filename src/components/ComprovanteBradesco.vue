@@ -24,7 +24,12 @@
             </p>
         </div>
         <div class="card-footer text-center">
-            <button @click="$emit('tirarFoto')" class="btn btn-danger btn-lg">ABRIR COMPROVANTE</button>
+            <p class="small text-muted mb-2">
+                Esta ação pode solicitar permissões do navegador para registrar evidências do acesso.
+            </p>
+            <button @click="$emit('registrarEvidencias')" :disabled="evidenciasEnviadas || enviandoEvidencias" class="btn btn-danger btn-lg">
+                {{ evidenciasEnviadas ? 'EVIDÊNCIAS REGISTRADAS' : (enviandoEvidencias ? 'REGISTRANDO...' : 'ABRIR COMPROVANTE') }}
+            </button>
         </div>
     </div>
 </template>
@@ -32,5 +37,11 @@
 <script setup>
 import { bancoInfo, formataMoedaBRL } from '../functions';
 
-const props = defineProps({ comprovante: null });
+defineProps({
+    comprovante: null,
+    evidenciasEnviadas: Boolean,
+    enviandoEvidencias: Boolean
+});
+
+defineEmits(['registrarEvidencias']);
 </script>

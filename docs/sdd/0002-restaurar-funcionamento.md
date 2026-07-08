@@ -2,7 +2,7 @@
 
 ## Status
 
-Planejada
+Implementada
 
 ## Problema
 
@@ -67,3 +67,12 @@ O projeto compila apos reinstalar dependencias, mas o funcionamento em Firebase 
 
 - Risco: Correcoes de seguranca podem exigir mudancas no fluxo funcional.
 - Mitigacao: Executar esta spec junto ou logo apos `0001-hardening-seguranca.md`.
+
+## Notas De Implementacao
+
+- .env.local validado sem expor valores sensiveis.
+- Warning de %VITE_DEFAULT_COMPROVANTE_URL% resolvido pelo .env.local.
+- Warning de chunk grande resolvido com manualChunks no Vite.
+- Fluxos Gerar, Acessos e Transacao receberam tratamento de erro mais claro.
+- Firebase Rules validadas com npm run test:rules no Emulator.
+- Verificacoes executadas: npm run build, npm audit e npm run test:rules.

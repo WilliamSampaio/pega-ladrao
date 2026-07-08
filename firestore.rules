@@ -2,18 +2,173 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
 
-    // This rule allows anyone with your Firestore database reference to view, edit,
-    // and delete all data in your Firestore database. It is useful for getting
-    // started, but it is configured to expire after 30 days because it
-    // leaves your app open to attackers. At that time, all client
-    // requests to your Firestore database will be denied.
-    //
-    // Make sure to write security rules for your app before that time, or else
-    // all client requests to your Firestore database will be denied until you Update
-    // your rules
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function optionalString(field, maxSize) {
+      return !(field in request.resource.data)
+        || request.resource.data[field] == null
+        || request.resource.data[field] is string
+          && request.resource.data[field].size() <= maxSize;
+    }
+
+    function optionalNumber(field) {
+      return !(field in request.resource.data)
+        || request.resource.data[field] == null
+        || request.resource.data[field] is number;
+    }
+
+    function optionalBool(field) {
+      return !(field in request.resource.data)
+        || request.resource.data[field] == null
+        || request.resource.data[field] is bool;
+    }
+
+    function validComprovante() {
+      return isSignedIn()
+        && request.resource.data.keys().hasOnly([
+          'instituicao',
+          'nomePagador',
+          'cpfPagador',
+          'valor',
+          'descricao',
+          'dataHora',
+          'nomePilantra',
+          'cpfPilantra',
+          'cnpjPilantra',
+          'chavePixPilantra',
+          'tipoChavePixPilantra',
+          'expiracao',
+          'ownerUid'
+        ])
+        && request.resource.data.keys().hasAll([
+          'instituicao',
+          'nomePagador',
+          'cpfPagador',
+          'valor',
+          'dataHora',
+          'expiracao',
+          'ownerUid'
+        ])
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.instituicao in ['bradesco', 'next']
+        && request.resource.data.nomePagador is string
+        && request.resource.data.nomePagador.size() > 0
+        && request.resource.data.nomePagador.size() <= 100
+        && request.resource.data.cpfPagador is string
+        && request.resource.data.cpfPagador.size() == 14
+        && request.resource.data.valor is number
+        && request.resource.data.valor >= 0.01
+        && request.resource.data.valor <= 999999.99
+        && request.resource.data.dataHora is timestamp
+        && request.resource.data.expiracao is timestamp
+        && request.resource.data.expiracao > request.time
+        && request.resource.data.expiracao <= request.time + duration.value(60, 'm')
+        && optionalString('descricao', 20)
+        && optionalString('nomePilantra', 100)
+        && optionalString('cpfPilantra', 14)
+        && optionalString('cnpjPilantra', 18)
+        && optionalString('chavePixPilantra', 120)
+        && (
+          !('tipoChavePixPilantra' in request.resource.data)
+          || request.resource.data.tipoChavePixPilantra == null
+          || request.resource.data.tipoChavePixPilantra in ['cpf', 'cnpj', 'numero', 'email', 'aleatoria']
+        );
+    }
+
+    function comprovantePath(comprovanteId) {
+      return /databases/$(database)/documents/comprovantes/$(comprovanteId);
+    }
+
+    function validPublicComprovante(comprovanteId) {
+      return exists(comprovantePath(comprovanteId))
+        && get(comprovantePath(comprovanteId)).data.expiracao > request.time;
+    }
+
+    function ownerCanReadAcesso() {
+      return isSignedIn()
+        && resource.data.ownerUid is string
+        && resource.data.ownerUid == request.auth.uid;
+    }
+
+    function validAcesso() {
+      return request.resource.data.keys().hasOnly([
+          'comprovanteId',
+          'ownerUid',
+          'at',
+          'consentimentoEvidencias',
+          'publicIp',
+          'userAgent',
+          'language',
+          'screenWidth',
+          'screenHeight',
+          'fotoCapturada',
+          'deviceId',
+          'manufacturer',
+          'model',
+          'operatingSystem',
+          'osVersion',
+          'platform',
+          'webViewVersion',
+          'isVirtual',
+          'accuracy',
+          'altitude',
+          'altitudeAccuracy',
+          'heading',
+          'latitude',
+          'longitude',
+          'speed'
+        ])
+        && request.resource.data.keys().hasAll(['comprovanteId', 'ownerUid', 'at'])
+        && request.resource.data.comprovanteId is string
+        && request.resource.data.ownerUid is string
+        && request.resource.data.at == request.time
+        && validPublicComprovante(request.resource.data.comprovanteId)
+        && request.resource.data.ownerUid == get(comprovantePath(request.resource.data.comprovanteId)).data.ownerUid
+        && optionalBool('consentimentoEvidencias')
+        && optionalString('publicIp', 64)
+        && optionalString('userAgent', 512)
+        && optionalString('language', 32)
+        && optionalString('deviceId', 128)
+        && optionalString('manufacturer', 128)
+        && optionalString('model', 128)
+        && optionalString('operatingSystem', 64)
+        && optionalString('osVersion', 64)
+        && optionalString('platform', 64)
+        && optionalString('webViewVersion', 128)
+        && optionalBool('fotoCapturada')
+        && optionalBool('isVirtual')
+        && optionalNumber('screenWidth')
+        && optionalNumber('screenHeight')
+        && optionalNumber('accuracy')
+        && optionalNumber('altitude')
+        && optionalNumber('altitudeAccuracy')
+        && optionalNumber('heading')
+        && optionalNumber('latitude')
+        && optionalNumber('longitude')
+        && optionalNumber('speed');
+    }
+
+    match /comprovantes/{comprovanteId} {
+      allow get: if resource.data.expiracao > request.time || isOwner(resource.data.ownerUid);
+      allow list: if false;
+      allow create: if validComprovante();
+      allow update, delete: if false;
+    }
+
+    match /acessos/{acessoId} {
+      allow get, list: if ownerCanReadAcesso();
+      allow create: if validAcesso();
+      allow update, delete: if false;
+    }
+
     match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2025, 4, 12);
+      allow read, write: if false;
     }
   }
 }
