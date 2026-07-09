@@ -16,9 +16,9 @@ Registrar o estado atual do projeto antes das correcoes de seguranca, funcioname
 
 - Stack principal: Vue 3, Vite, Firebase, Pinia, Vue Router, Capacitor.
 - Scripts disponiveis:
-  - `npm run dev`
-  - `npm run build`
-  - `npm run preview`
+    - `npm run dev`
+    - `npm run build`
+    - `npm run preview`
 - Nao ha scripts de lint ou testes automatizados configurados.
 - Nao havia estrutura SDD dedicada antes desta etapa.
 

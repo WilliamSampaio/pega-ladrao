@@ -37,6 +37,9 @@ Use esta seção se você só quer usar a aplicação já publicada no Firebase 
 
 A página de acessos atualiza periodicamente. Mantenha o link `/acessos?id=<ID>` salvo enquanto o comprovante estiver válido.
 
+A interface usa tema escuro por padrão e oferece controle para alternar para o
+tema claro. A preferência fica salva no navegador.
+
 ## Para Desenvolvedores
 
 Use esta seção se você quer rodar localmente ou publicar sua própria instância Firebase.
@@ -91,10 +94,22 @@ Não commite `.env.local`.
 Arquivos importantes:
 
 - `firebase.json`
+- `.firebaserc` mapeia os sites de Hosting para `pega-ladrao.app.br` e
+  `comprovante-br-gov-bcb-pix-cdba8.web.app` via os targets `pega-ladrao` e
+  `comprovante`.
+- `public/assets/` expõe os arquivos estáticos usados pelo comprovante público
+  e eles aparecem no build como `/assets/...`.
 - `firestore.rules`
 - `firestore.indexes.json`
 - `storage.rules`
 - `functions/`
+
+### Frontend
+
+- O shell do gerador e o painel de acessos usam CSS proprio do projeto.
+- A rota publica `/transacao` fica isolada do shell e dos estilos globais do
+  gerador.
+- O projeto nao depende mais de Bootstrap CDN para a interface principal.
 
 ### Limpeza Agendada
 

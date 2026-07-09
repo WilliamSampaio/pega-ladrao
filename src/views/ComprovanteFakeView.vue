@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { firestore, storage } from '../firebase';
 import { collection, doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
@@ -38,6 +38,16 @@ onBeforeMount(() => {
     appStore.loadingToggle();
 });
 
+onMounted(() => {
+    document.documentElement.classList.add('public-receipt-mode');
+    document.body.classList.add('public-receipt-mode');
+});
+
+onBeforeUnmount(() => {
+    document.documentElement.classList.remove('public-receipt-mode');
+    document.body.classList.remove('public-receipt-mode');
+});
+
 onMounted(async () => {
     try {
         if (!route.query.id) {
@@ -74,15 +84,11 @@ onMounted(async () => {
 });
 
 const bancoImgSrc = computed(() => {
-    return new URL('../assets/bancos/' + comprovante.value.instituicao + '.jpg', import.meta.url)
-        .href;
+    return '/assets/bancos/' + comprovante.value.instituicao + '.jpg';
 });
 
 const faviconSrc = computed(() => {
-    return new URL(
-        '../assets/bancos/' + comprovante.value.instituicao + '-favicon.png',
-        import.meta.url,
-    ).href;
+    return '/assets/bancos/' + comprovante.value.instituicao + '-favicon.png';
 });
 
 async function registrarAcessoBasico() {
@@ -287,8 +293,155 @@ function setMetaData() {
 </template>
 
 <style scoped>
+:global(html.public-receipt-mode),
+:global(body.public-receipt-mode) {
+    min-width: 320px;
+    min-height: 100%;
+    margin: 0;
+    background: #ffffff;
+    color: #1f2937;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+:global(body.public-receipt-mode *) {
+    box-sizing: border-box;
+}
+
+.container {
+    width: min(100% - 24px, 1048px);
+    margin: 0 auto;
+    padding-block: 40px;
+}
+
+:deep(.card) {
+    overflow: hidden;
+    border: 1px solid #d7d7d7;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #334155;
+}
+
+:deep(.mt-3) {
+    margin-top: 1rem;
+}
+
+:deep(.mb-3) {
+    margin-bottom: 1rem;
+}
+
+:deep(.card-img-top) {
+    display: block;
+}
+
+:deep(.w-25) {
+    width: min(25%, 240px);
+}
+
+:deep(.mx-auto) {
+    margin-inline: auto;
+}
+
+:deep(.my-3) {
+    margin-block: 1rem;
+}
+
+:deep(.d-block) {
+    display: block;
+}
+
+:deep(.card-body) {
+    padding: 16px;
+}
+
+:deep(.card-title) {
+    margin-block: 0 12px;
+    color: #334155;
+}
+
+:deep(.text-center) {
+    text-align: center;
+}
+
+:deep(.card-text) {
+    margin-block: 0 18px;
+    color: #475569;
+}
+
+:deep(.card-footer) {
+    border-top: 1px solid #d7d7d7;
+    padding: 12px 16px;
+    background: #f8f8f8;
+}
+
+:deep(.small) {
+    font-size: 0.875rem;
+}
+
+:deep(.text-muted) {
+    color: #64748b;
+}
+
+:deep(.mb-2) {
+    margin-bottom: 0.5rem;
+}
+
+:deep(.btn) {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 9px 16px;
+    font: inherit;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+:deep(.btn:disabled) {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+:deep(.btn-danger) {
+    color: #ffffff;
+    background: #dc3545;
+    border-color: #dc3545;
+}
+
+:deep(.btn-lg) {
+    min-height: 48px;
+    padding-inline: 18px;
+    font-size: 1.05rem;
+}
+
+:deep(.alert) {
+    border: 1px solid #f59e0b;
+    border-radius: 6px;
+    padding: 12px 16px;
+    color: #78350f;
+    background: #fffbeb;
+}
+
+:deep(.alert-warning) {
+    border-color: #f59e0b;
+}
+
 video,
 canvas {
     display: none;
+}
+
+@media (max-width: 640px) {
+    .container {
+        width: min(100% - 16px, 1048px);
+        padding-block: 12px;
+    }
+
+    :deep(.w-25) {
+        width: min(54%, 220px);
+    }
 }
 </style>

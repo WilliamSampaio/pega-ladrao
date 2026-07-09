@@ -2,6 +2,8 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
+    // O frontend decide em qual host o fluxo roda; o Storage valida apenas
+    // autenticacao do owner e o caminho das capturas.
     function isSignedIn() {
       return request.auth != null;
     }

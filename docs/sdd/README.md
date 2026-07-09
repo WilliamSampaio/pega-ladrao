@@ -17,12 +17,13 @@ configuracao, seguranca ou fluxo de desenvolvimento.
 
 ## Estado Das Specs
 
-| Spec | Status | Objetivo |
-| --- | --- | --- |
-| `0001-hardening-seguranca.md` | Planejada | Corrigir seguranca, privacidade, Firebase Rules e vulnerabilidades. |
-| `0002-restaurar-funcionamento.md` | Planejada | Tornar o projeto funcional novamente. |
-| `0003-documentacao-simples.md` | Planejada | Simplificar documentacao para usuarios e mantenedores. |
-| `0004-cloud-functions-agendada.md` | Planejada | Remover comprovantes expirados, acessos e capturas por rotina agendada. |
+| Spec                               | Status    | Objetivo                                                                 |
+| ---------------------------------- | --------- | ------------------------------------------------------------------------ |
+| `0001-hardening-seguranca.md`      | Planejada | Corrigir seguranca, privacidade, Firebase Rules e vulnerabilidades.      |
+| `0002-restaurar-funcionamento.md`  | Planejada | Tornar o projeto funcional novamente.                                    |
+| `0003-documentacao-simples.md`     | Planejada | Simplificar documentacao para usuarios e mantenedores.                   |
+| `0004-cloud-functions-agendada.md` | Planejada | Remover comprovantes expirados, acessos e capturas por rotina agendada.  |
+| `0005-refatoracao-frontend.md`     | Planejada | Refatorar o frontend com design system, mobile first e temas dark/light. |
 
 ## Padrao Minimo
 

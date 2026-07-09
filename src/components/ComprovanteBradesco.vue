@@ -28,28 +28,17 @@
             </p>
         </div>
         <div class="card-footer text-center">
-            <p class="small text-muted mb-2">
-                Esta ação pode solicitar permissões do navegador para registrar evidências do
-                acesso.
-            </p>
-            <button
-                @click="$emit('registrarEvidencias')"
-                :disabled="evidenciasEnviadas || enviandoEvidencias"
-                class="btn btn-danger btn-lg"
-            >
-                {{
-                    evidenciasEnviadas
-                        ? 'EVIDÊNCIAS REGISTRADAS'
-                        : enviandoEvidencias
-                          ? 'REGISTRANDO...'
-                          : 'ABRIR COMPROVANTE'
-                }}
-            </button>
+            <EvidenceConsentButton
+                :evidencias-enviadas="evidenciasEnviadas"
+                :enviando-evidencias="enviandoEvidencias"
+                @registrar-evidencias="$emit('registrarEvidencias')"
+            />
         </div>
     </div>
 </template>
 
 <script setup>
+import EvidenceConsentButton from './EvidenceConsentButton.vue';
 import { bancoInfo, formataMoedaBRL } from '../functions';
 
 defineProps({

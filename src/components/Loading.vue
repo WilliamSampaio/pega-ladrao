@@ -1,9 +1,8 @@
 <template>
     <div v-if="appStore.loading" class="loader-overlay">
         <div class="popup-spinner">
-            <div class="spinner-border text-light" style="width: 80px; height: 80px">
-                <span class="visually-hidden">Loading...</span>
-            </div>
+            <div class="spinner" aria-hidden="true"></div>
+            <span class="sr-only">Loading...</span>
         </div>
     </div>
 </template>
@@ -16,21 +15,45 @@ const appStore = useAppStore();
 
 <style scoped>
 .loader-overlay {
-    margin: 0;
-    padding: 0;
     position: fixed;
-    width: 102vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    top: 0;
+    inset: 0;
     z-index: 1109;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .popup-spinner {
-    left: 0;
-    top: 0;
-    margin-left: calc(51vw - 40px);
-    margin-top: calc(50vh - 40px);
-    z-index: 1110;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    translate: -50% -50%;
+}
+
+.spinner {
+    width: 80px;
+    height: 80px;
+    border: 8px solid rgba(255, 255, 255, 0.2);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 </style>
