@@ -12,12 +12,12 @@ Use esta seção se você só quer usar a aplicação já publicada no Firebase 
 
 ### Endereços
 
-- Gerar e acompanhar comprovantes: <https://pega-ladrao-d9d04.web.app/_gerar>
+- Gerar e acompanhar comprovantes: <https://pegaladrao.app.br>
 - Link base do comprovante enviado ao destinatário: <https://comprovante-br-gov-bcb-pix-cdba8.web.app>
 
 ### Passo A Passo
 
-1. Acesse <https://pega-ladrao-d9d04.web.app/_gerar>.
+1. Acesse <https://pegaladrao.app.br>.
 
    <img src="./prints/1.png" style="width:150px;" alt="Tela inicial para gerar comprovante"/>
    <img src="./prints/2.png" style="width:150px;" alt="Formulário de geração do comprovante"/>

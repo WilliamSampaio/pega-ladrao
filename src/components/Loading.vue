@@ -1,7 +1,7 @@
 <template>
     <div v-if="appStore.loading" class="loader-overlay">
         <div class="popup-spinner">
-            <div class="spinner-border text-light" style="width: 80px; height: 80px;">
+            <div class="spinner-border text-light" style="width: 80px; height: 80px">
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>

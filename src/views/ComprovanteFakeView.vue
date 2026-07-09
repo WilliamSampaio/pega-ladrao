@@ -5,7 +5,16 @@ import { firestore, storage } from '../firebase';
 import { collection, doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { ref as storageRef, uploadString } from 'firebase/storage';
 import { useAppStore } from '../store';
-import { bancoInfo, delay, formataDataHoraPtBr, formataMoedaBRL, getCurrentPosition, maskCpf, pegaPrimeiroNome, requestCameraPermission } from '../functions';
+import {
+    bancoInfo,
+    delay,
+    formataDataHoraPtBr,
+    formataMoedaBRL,
+    getCurrentPosition,
+    maskCpf,
+    pegaPrimeiroNome,
+    requestCameraPermission,
+} from '../functions';
 import Bradesco from '../components/ComprovanteBradesco.vue';
 import Next from '../components/ComprovanteNext.vue';
 import { Device } from '@capacitor/device';
@@ -39,7 +48,7 @@ onMounted(async () => {
         const docRef = doc(firestore, 'comprovantes', route.query.id);
         const docSnap = await getDoc(docRef);
 
-        if (!docSnap.exists() || docSnap.data().expiracao.toDate() < (new Date)) {
+        if (!docSnap.exists() || docSnap.data().expiracao.toDate() < new Date()) {
             router.push({ path: '/' });
             return;
         }
@@ -65,11 +74,15 @@ onMounted(async () => {
 });
 
 const bancoImgSrc = computed(() => {
-    return new URL('../assets/bancos/' + comprovante.value.instituicao + '.jpg', import.meta.url).href
+    return new URL('../assets/bancos/' + comprovante.value.instituicao + '.jpg', import.meta.url)
+        .href;
 });
 
 const faviconSrc = computed(() => {
-    return new URL('../assets/bancos/' + comprovante.value.instituicao + '-favicon.png', import.meta.url).href
+    return new URL(
+        '../assets/bancos/' + comprovante.value.instituicao + '-favicon.png',
+        import.meta.url,
+    ).href;
 });
 
 async function registrarAcessoBasico() {
@@ -92,7 +105,9 @@ async function registrarAcessoBasico() {
 }
 
 async function registrarEvidencias() {
-    const autorizado = window.confirm('Para registrar evidências, este site solicitará permissões do navegador e poderá coletar IP público, informações do dispositivo, localização aproximada e uma imagem da câmera. Deseja continuar?');
+    const autorizado = window.confirm(
+        'Para registrar evidências, este site solicitará permissões do navegador e poderá coletar IP público, informações do dispositivo, localização aproximada e uma imagem da câmera. Deseja continuar?',
+    );
 
     if (!autorizado) {
         return;
@@ -145,7 +160,9 @@ async function registrarEvidencias() {
             console.error('Erro ao capturar foto:', error);
         }
 
-        Object.keys(evidencias).forEach(key => evidencias[key] === undefined && delete evidencias[key]);
+        Object.keys(evidencias).forEach(
+            (key) => evidencias[key] === undefined && delete evidencias[key],
+        );
         await setDoc(acessoRef, evidencias);
         data.evidenciasEnviadas = true;
     } catch (error) {
@@ -172,21 +189,39 @@ async function capturarFoto(acessoId) {
     const context = canvas.value.getContext('2d');
     context.drawImage(video.value, 0, 0, canvas.value.width, canvas.value.height);
 
-    const path = 'capturas/' + comprovante.value.ownerUid + '/' + comprovante.value.transacao + '/' + acessoId + '/' + Date.now().toString() + '.jpg';
-    await uploadString(storageRef(storage, path), canvas.value.toDataURL('image/jpeg', 0.85), 'data_url');
+    const path =
+        'capturas/' +
+        comprovante.value.ownerUid +
+        '/' +
+        comprovante.value.transacao +
+        '/' +
+        acessoId +
+        '/' +
+        Date.now().toString() +
+        '.jpg';
+    await uploadString(
+        storageRef(storage, path),
+        canvas.value.toDataURL('image/jpeg', 0.85),
+        'data_url',
+    );
 }
 
 function pararCamera() {
     const tracks = video.value?.srcObject?.getTracks?.();
     if (tracks) {
-        tracks.forEach(t => t.stop());
+        tracks.forEach((t) => t.stop());
     }
 }
 
 function setMetaData() {
     const banco = bancoInfo(comprovante.value.instituicao);
 
-    document.title = banco.nomeResumido + ' - Pix ' + formataMoedaBRL(comprovante.value.valor) + ' de ' + pegaPrimeiroNome(comprovante.value.nomePagador);
+    document.title =
+        banco.nomeResumido +
+        ' - Pix ' +
+        formataMoedaBRL(comprovante.value.valor) +
+        ' de ' +
+        pegaPrimeiroNome(comprovante.value.nomePagador);
 
     let docRecebedor = '';
     let nomeRecebedor = '';
@@ -212,7 +247,15 @@ function setMetaData() {
     document
         .getElementsByTagName('meta')
         .namedItem('description')
-        .setAttribute('content', 'Comprovante ' + banco.nome + ': Transação no valor de ' + formataMoedaBRL(comprovante.value.valor) + para + '.');
+        .setAttribute(
+            'content',
+            'Comprovante ' +
+                banco.nome +
+                ': Transação no valor de ' +
+                formataMoedaBRL(comprovante.value.valor) +
+                para +
+                '.',
+        );
 
     document.querySelector('link[rel="icon"]').href = faviconSrc.value;
 }

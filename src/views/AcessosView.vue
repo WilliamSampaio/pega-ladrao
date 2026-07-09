@@ -19,7 +19,7 @@ const data = reactive({
     acessos: [],
     fotos: {},
     expiracaoContagem: '',
-    expirado: false
+    expirado: false,
 });
 
 onBeforeMount(() => {
@@ -39,7 +39,10 @@ onMounted(async () => {
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
-            data.alert = alertMessage('danger', 'Comprovante não existe ou você não tem acesso a ele.');
+            data.alert = alertMessage(
+                'danger',
+                'Comprovante não existe ou você não tem acesso a ele.',
+            );
             appStore.loadingToggle();
             return;
         }
@@ -49,7 +52,10 @@ onMounted(async () => {
 
         await atualizarAcessos(route.query.id);
     } catch (error) {
-        data.alert = alertMessage('danger', 'Erro ao carregar acessos. Verifique autenticação anônima, regras do Firebase e índices publicados.');
+        data.alert = alertMessage(
+            'danger',
+            'Erro ao carregar acessos. Verifique autenticação anônima, regras do Firebase e índices publicados.',
+        );
         console.error('Erro ao carregar acessos:', error);
         appStore.loadingToggle();
         return;
@@ -70,7 +76,7 @@ onMounted(async () => {
             data.expirado = true;
             data.expiracaoContagem = 'Comprovante expirado!';
         }
-    }, 1000)
+    }, 1000);
 
     appStore.loadingToggle();
 
@@ -94,7 +100,12 @@ async function atualizarAcessos(comprovanteId) {
 
 async function queryAcessos(comprovanteId) {
     data.acessos = [];
-    const q = query(collection(firestore, 'acessos'), where('comprovanteId', '==', comprovanteId), where('ownerUid', '==', auth.currentUser.uid), orderBy('at', 'desc'));
+    const q = query(
+        collection(firestore, 'acessos'),
+        where('comprovanteId', '==', comprovanteId),
+        where('ownerUid', '==', auth.currentUser.uid),
+        orderBy('at', 'desc'),
+    );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
         let acesso = { ...doc.data() };
@@ -135,85 +146,160 @@ function formatarValor(valor) {
 </script>
 
 <template>
-    <nav class="navbar mb-3" style="background-color: lightgray;">
+    <nav class="navbar mb-3" style="background-color: lightgray">
         <div class="container-fluid">
             <span class="navbar-brand">Pega Ladrão</span>
-            <RouterLink :to="{ name: 'gerar' }" class="btn btn-danger">Gerar Novo Comprovante</RouterLink>
+            <RouterLink :to="{ name: 'gerar' }" class="btn btn-danger"
+                >Gerar Novo Comprovante</RouterLink
+            >
         </div>
     </nav>
 
     <div class="container">
-        <div v-if="data.alert" :class="'alert alert-' + data.alert.class + ' alert-dismissible fade show mb-3'" role="alert">
+        <div
+            v-if="data.alert"
+            :class="'alert alert-' + data.alert.class + ' alert-dismissible fade show mb-3'"
+            role="alert"
+        >
             {{ data.alert.message }}
-            <button @click="data.alert = null" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button
+                @click="data.alert = null"
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+            ></button>
         </div>
 
-        <div v-if="data.comprovante && !data.expirado" class="alert alert-success text-center" role="alert">
-            <h4 class="alert-heading" style="font-weight: bold;">Comprovante gerado com sucesso!</h4>
-            <p><b>ID: {{ data.comprovante?.id }}</b></p>
-            <p>Copie o link do comprovante e acompanhe os acessos registrados logo abaixo. Evidências sensíveis só aparecem quando o visitante aciona o registro explícito no comprovante.</p>
-            <hr>
+        <div
+            v-if="data.comprovante && !data.expirado"
+            class="alert alert-success text-center"
+            role="alert"
+        >
+            <h4 class="alert-heading" style="font-weight: bold">Comprovante gerado com sucesso!</h4>
+            <p>
+                <b>ID: {{ data.comprovante?.id }}</b>
+            </p>
+            <p>
+                Copie o link do comprovante e acompanhe os acessos registrados logo abaixo.
+                Evidências sensíveis só aparecem quando o visitante aciona o registro explícito no
+                comprovante.
+            </p>
+            <hr />
             <p class="mb-0">
-                {{ VITE_DEFAULT_COMPROVANTE_URL }}/transacao?id={{ data.comprovante?.id }}<br><br>
-                <button @click="copyToClipboard(VITE_DEFAULT_COMPROVANTE_URL + '/transacao?id=' + data.comprovante.id)" type="button" class="btn btn-info">Copiar Link</button>
+                {{ VITE_DEFAULT_COMPROVANTE_URL }}/transacao?id={{ data.comprovante?.id
+                }}<br /><br />
+                <button
+                    @click="
+                        copyToClipboard(
+                            VITE_DEFAULT_COMPROVANTE_URL + '/transacao?id=' + data.comprovante.id,
+                        )
+                    "
+                    type="button"
+                    class="btn btn-info"
+                >
+                    Copiar Link
+                </button>
             </p>
         </div>
 
         <h2>Acessos</h2>
-        <h3 style="color: red;">{{ data.expiracaoContagem }}</h3>
-        <hr>
+        <h3 style="color: red">{{ data.expiracaoContagem }}</h3>
+        <hr />
         <div class="accordion" id="accordionFlush">
             <div v-for="(acesso, index) in data.acessos" :key="acesso.id" class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#item' + index" aria-expanded="false" :aria-controls="'item' + index">
+                    <button
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        :data-bs-target="'#item' + index"
+                        aria-expanded="false"
+                        :aria-controls="'item' + index"
+                    >
                         {{ index + 1 }}. {{ formataDataHoraPtBr(acesso.at.toDate()) }}
-                        <span v-if="acesso.consentimentoEvidencias" class="badge text-bg-warning ms-2">com evidências</span>
+                        <span
+                            v-if="acesso.consentimentoEvidencias"
+                            class="badge text-bg-warning ms-2"
+                            >com evidências</span
+                        >
                     </button>
                 </h2>
-                <div :id="'item' + index" class="accordion-collapse collapse" data-bs-parent="#accordionFlush">
+                <div
+                    :id="'item' + index"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#accordionFlush"
+                >
                     <div class="accordion-body">
                         <p>
-                            <b>ID:</b> {{ acesso.id }} <br>
-                            <b>Data e Hora:</b> {{ formataDataHoraPtBr(acesso.at.toDate()) }} <br>
-                            <b>Registro de evidências:</b> {{ acesso.consentimentoEvidencias ? 'acionado pelo visitante' : 'não acionado' }}
+                            <b>ID:</b> {{ acesso.id }} <br />
+                            <b>Data e Hora:</b> {{ formataDataHoraPtBr(acesso.at.toDate()) }} <br />
+                            <b>Registro de evidências:</b>
+                            {{
+                                acesso.consentimentoEvidencias
+                                    ? 'acionado pelo visitante'
+                                    : 'não acionado'
+                            }}
                         </p>
 
                         <template v-if="acesso.consentimentoEvidencias">
                             <h5>Rede e navegador</h5>
-                            <hr>
+                            <hr />
                             <p>
-                                <b>IP público:</b> {{ formatarValor(acesso.publicIp) }} <br>
-                                <b>User agent:</b> {{ formatarValor(acesso.userAgent) }} <br>
-                                <b>Idioma:</b> {{ formatarValor(acesso.language) }} <br>
-                                <b>Tela:</b> {{ formatarValor(acesso.screenWidth) }} x {{ formatarValor(acesso.screenHeight) }}
+                                <b>IP público:</b> {{ formatarValor(acesso.publicIp) }} <br />
+                                <b>User agent:</b> {{ formatarValor(acesso.userAgent) }} <br />
+                                <b>Idioma:</b> {{ formatarValor(acesso.language) }} <br />
+                                <b>Tela:</b> {{ formatarValor(acesso.screenWidth) }} x
+                                {{ formatarValor(acesso.screenHeight) }}
                             </p>
 
                             <h5>Informações do dispositivo</h5>
-                            <hr>
+                            <hr />
                             <p>
-                                <b>deviceId:</b> {{ formatarValor(acesso.deviceId) }} <br>
-                                <b>manufacturer:</b> {{ formatarValor(acesso.manufacturer) }} <br>
-                                <b>model:</b> {{ formatarValor(acesso.model) }} <br>
-                                <b>operatingSystem:</b> {{ formatarValor(acesso.operatingSystem) }} <br>
-                                <b>osVersion:</b> {{ formatarValor(acesso.osVersion) }} <br>
-                                <b>platform:</b> {{ formatarValor(acesso.platform) }} <br>
+                                <b>deviceId:</b> {{ formatarValor(acesso.deviceId) }} <br />
+                                <b>manufacturer:</b> {{ formatarValor(acesso.manufacturer) }} <br />
+                                <b>model:</b> {{ formatarValor(acesso.model) }} <br />
+                                <b>operatingSystem:</b> {{ formatarValor(acesso.operatingSystem) }}
+                                <br />
+                                <b>osVersion:</b> {{ formatarValor(acesso.osVersion) }} <br />
+                                <b>platform:</b> {{ formatarValor(acesso.platform) }} <br />
                                 <b>webViewVersion:</b> {{ formatarValor(acesso.webViewVersion) }}
                             </p>
 
                             <h5>Localização</h5>
-                            <hr>
+                            <hr />
                             <p v-if="acesso.latitude && acesso.longitude">
-                                <b>Precisão:</b> {{ acesso.accuracy }} <br>
-                                <b>Latitude:</b> {{ acesso.latitude }} <br>
-                                <b>Longitude:</b> {{ acesso.longitude }} <br><br>
-                                <iframe :src="'https://maps.google.com/maps?q=' + acesso.latitude + ',' + acesso.longitude + '&z=15&output=embed'" frameborder="1" style="width: 100%; height: 300px;"></iframe>
+                                <b>Precisão:</b> {{ acesso.accuracy }} <br />
+                                <b>Latitude:</b> {{ acesso.latitude }} <br />
+                                <b>Longitude:</b> {{ acesso.longitude }} <br /><br />
+                                <iframe
+                                    :src="
+                                        'https://maps.google.com/maps?q=' +
+                                        acesso.latitude +
+                                        ',' +
+                                        acesso.longitude +
+                                        '&z=15&output=embed'
+                                    "
+                                    frameborder="1"
+                                    style="width: 100%; height: 300px"
+                                ></iframe>
                             </p>
-                            <div v-else class="alert alert-warning text-center" role="alert">Localização não disponível.</div>
+                            <div v-else class="alert alert-warning text-center" role="alert">
+                                Localização não disponível.
+                            </div>
 
                             <h5 v-if="data.fotos[acesso.id]?.length" class="text-center">Fotos</h5>
                             <div v-if="data.fotos[acesso.id]?.length" class="row g-2">
-                                <div v-for="foto in data.fotos[acesso.id]" :key="foto" class="col-12 col-md-6">
-                                    <img :src="foto" class="img-fluid rounded" alt="Evidência capturada">
+                                <div
+                                    v-for="foto in data.fotos[acesso.id]"
+                                    :key="foto"
+                                    class="col-12 col-md-6"
+                                >
+                                    <img
+                                        :src="foto"
+                                        class="img-fluid rounded"
+                                        alt="Evidência capturada"
+                                    />
                                 </div>
                             </div>
                         </template>
