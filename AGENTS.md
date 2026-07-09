@@ -42,6 +42,14 @@ Storage access patterns. Run `npm run build`, `npm audit`, and
 Manual browser testing is still required for camera, geolocation, IP lookup, and
 Firebase project configuration.
 
+## Change Traceability
+
+Every code change, including features, bug fixes, hotfixes, refactors, and
+configuration changes, must be reflected in the related project guidance before
+handoff. Update the relevant docs, README sections, AGENTS instructions, SDD
+specs, and automated or manual tests/checks in the same change whenever behavior,
+commands, configuration, security posture, or developer workflow is affected.
+
 ## Commit & Pull Request Guidelines
 
 Recent commits use short Portuguese summaries, for example

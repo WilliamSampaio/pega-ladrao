@@ -10,6 +10,11 @@ Este diretorio organiza o desenvolvimento por specs pequenas e verificaveis.
 4. Atualize testes, checks e documentacao relacionados.
 5. Registre a verificacao executada antes de concluir.
 
+Toda mudanca de codigo, seja feature, bugfix, hotfix, refatoracao ou
+configuracao, deve atualizar junto as docs, README, AGENTS, specs e testes ou
+checks relacionados quando houver impacto em comportamento, comandos,
+configuracao, seguranca ou fluxo de desenvolvimento.
+
 ## Estado Das Specs
 
 | Spec | Status | Objetivo |
