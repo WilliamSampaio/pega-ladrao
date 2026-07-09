@@ -29,8 +29,10 @@ spaces in existing Vue and JavaScript files. Prefer clear Portuguese UI text,
 matching the current app language. Use camelCase for variables and functions,
 PascalCase for Vue components, and route view filenames ending in `View.vue`.
 
-There is no formatter or linter configured yet, so keep changes minimal and
-consistent with nearby code.
+Use Prettier for source formatting. Run `npm run format:check` before handoff,
+and `npm run format` when intentionally applying formatting changes. There is
+no linter configured yet, so keep code changes minimal and consistent with
+nearby code.
 
 ## Testing Guidelines
 

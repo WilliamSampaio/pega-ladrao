@@ -1,23 +1,23 @@
 {
-  "indexes": [
-    {
-      "collectionGroup": "acessos",
-      "queryScope": "COLLECTION",
-      "fields": [
+    "indexes": [
         {
-          "fieldPath": "comprovanteId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "ownerUid",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "at",
-          "order": "DESCENDING"
+            "collectionGroup": "acessos",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "comprovanteId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "ownerUid",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "at",
+                    "order": "DESCENDING"
+                }
+            ]
         }
-      ]
-    }
-  ],
-  "fieldOverrides": []
+    ],
+    "fieldOverrides": []
 }

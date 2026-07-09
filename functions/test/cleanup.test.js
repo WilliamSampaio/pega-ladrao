@@ -56,9 +56,7 @@ test('mantem comprovante nao expirado com seus acessos e capturas', async () => 
             },
         },
     });
-    const bucket = new FakeBucket([
-        'capturas/owner-uid/valido/acesso1/photo.jpg',
-    ]);
+    const bucket = new FakeBucket(['capturas/owner-uid/valido/acesso1/photo.jpg']);
 
     const result = await cleanupExpiredData({ db, bucket, now, logger: silentLogger });
 
@@ -80,9 +78,7 @@ test('reexecucao ignora dados ja removidos parcialmente', async () => {
         },
         acessos: {},
     });
-    const bucket = new FakeBucket([
-        'capturas/owner-uid/expirado/acesso1/photo.jpg',
-    ], {
+    const bucket = new FakeBucket(['capturas/owner-uid/expirado/acesso1/photo.jpg'], {
         deleteAsNotFound: new Set(['capturas/owner-uid/expirado/acesso1/photo.jpg']),
     });
 
@@ -132,7 +128,13 @@ class FakeCollection {
     }
 
     where(field, operator, value) {
-        return new FakeCollection(this.db, this.name, this.filters.concat({ field, operator, value }), this.ordering, this.max);
+        return new FakeCollection(
+            this.db,
+            this.name,
+            this.filters.concat({ field, operator, value }),
+            this.ordering,
+            this.max,
+        );
     }
 
     orderBy(field, direction) {
@@ -144,11 +146,18 @@ class FakeCollection {
     }
 
     async get() {
-        const records = Array.from(this.db.collections.get(this.name)?.entries() || [])
-            .filter(([, data]) => this.filters.every(filter => matchesFilter(data, filter)));
+        const records = Array.from(this.db.collections.get(this.name)?.entries() || []).filter(
+            ([, data]) => this.filters.every((filter) => matchesFilter(data, filter)),
+        );
 
         if (this.ordering) {
-            records.sort(([, left], [, right]) => compareValues(left[this.ordering.field], right[this.ordering.field], this.ordering.direction));
+            records.sort(([, left], [, right]) =>
+                compareValues(
+                    left[this.ordering.field],
+                    right[this.ordering.field],
+                    this.ordering.direction,
+                ),
+            );
         }
 
         const limited = typeof this.max === 'number' ? records.slice(0, this.max) : records;
@@ -200,8 +209,8 @@ class FakeBucket {
     async getFiles({ prefix }) {
         return [
             Array.from(this.files)
-                .filter(path => path.startsWith(prefix))
-                .map(path => new FakeFile(this, path)),
+                .filter((path) => path.startsWith(prefix))
+                .map((path) => new FakeFile(this, path)),
         ];
     }
 

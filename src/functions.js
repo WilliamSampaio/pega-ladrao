@@ -5,13 +5,13 @@ function copyToClipboard(text) {
 
 function alertMessage(type, message) {
     return {
-        'class': type,
-        'message': message
-    }
+        class: type,
+        message: message,
+    };
 }
 
 function delay(ms) {
-    return new Promise(res => setTimeout(res, ms));
+    return new Promise((res) => setTimeout(res, ms));
 }
 
 async function requestCameraPermission(videoElement) {
@@ -25,12 +25,12 @@ async function getCurrentPosition() {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
             enableHighAccuracy: true,
             timeout: 15000,
-            maximumAge: 0
+            maximumAge: 0,
         });
     });
 
     return position.coords.toJSON();
-};
+}
 
 function maskCpf(cpf) {
     let splitted = String(cpf).replace('-', '.').split('.');
@@ -42,7 +42,7 @@ function formataMoedaBRL(valor) {
 }
 
 function formataDataHoraPtBr(date, dateStyle = 'short', timeStyle = 'long') {
-    return new Intl.DateTimeFormat("pt-BR", {
+    return new Intl.DateTimeFormat('pt-BR', {
         dateStyle: dateStyle,
         timeStyle: timeStyle,
     }).format(date);
@@ -57,16 +57,16 @@ function bancoInfo(key) {
         return {
             nome: 'Bradesco S/A',
             nomeResumido: 'Bradesco',
-            codigo: 237
-        }
+            codigo: 237,
+        };
     }
 
     if (key == 'next') {
         return {
             nome: 'Next (237 - Bradesco S. A.)',
             nomeResumido: 'Next',
-            codigo: 237
-        }
+            codigo: 237,
+        };
     }
 
     return null;
@@ -82,5 +82,5 @@ export {
     formataMoedaBRL,
     formataDataHoraPtBr,
     pegaPrimeiroNome,
-    bancoInfo
-}
+    bancoInfo,
+};

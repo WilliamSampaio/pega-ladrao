@@ -79,6 +79,8 @@ Não commite `.env.local`.
 - `npm run dev`: inicia o servidor local de desenvolvimento.
 - `npm run build`: gera o build de produção em `dist/`.
 - `npm run preview`: serve o build localmente.
+- `npm run format`: formata arquivos fonte e documentação com Prettier.
+- `npm run format:check`: verifica formatação sem alterar arquivos.
 - `npm run test:rules`: valida Firestore e Storage Rules no Firebase Emulator.
 - `npm audit`: verifica vulnerabilidades de dependências.
 - `npm --prefix functions test`: valida a rotina local de limpeza de dados expirados.
@@ -104,6 +106,7 @@ Antes de publicar, rode:
 
 ```bash
 npm run build
+npm run format:check
 npm audit
 npm run test:rules
 npm --prefix functions test

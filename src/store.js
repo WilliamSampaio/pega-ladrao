@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useAppStore = defineStore('appStore', () => {
@@ -12,5 +12,5 @@ export const useAppStore = defineStore('appStore', () => {
         }
     }
 
-    return { loading, loadingToggle }
+    return { loading, loadingToggle };
 });

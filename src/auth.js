@@ -1,5 +1,5 @@
-import { signInAnonymously } from "firebase/auth";
-import { auth } from "./firebase";
+import { signInAnonymously } from 'firebase/auth';
+import { auth } from './firebase';
 
 async function ensureAnonymousUser() {
     if (auth.currentUser) {
@@ -10,6 +10,4 @@ async function ensureAnonymousUser() {
     return credential.user;
 }
 
-export {
-    ensureAnonymousUser
-}
+export { ensureAnonymousUser };

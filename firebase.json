@@ -1,67 +1,54 @@
 {
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  },
-  "hosting": [
-    {
-      "target": "pega-ladrao",
-      "public": "dist",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
-      "target": "comprovante",
-      "public": "dist",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    }
-  ],
-  "storage": {
-    "rules": "storage.rules"
-  },
-  "emulators": {
     "firestore": {
-      "host": "127.0.0.1",
-      "port": 18080
+        "rules": "firestore.rules",
+        "indexes": "firestore.indexes.json"
     },
+    "hosting": [
+        {
+            "target": "pega-ladrao",
+            "public": "dist",
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        },
+        {
+            "target": "comprovante",
+            "public": "dist",
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        }
+    ],
     "storage": {
-      "host": "127.0.0.1",
-      "port": 19199
+        "rules": "storage.rules"
     },
-    "ui": {
-      "enabled": false
+    "emulators": {
+        "firestore": {
+            "host": "127.0.0.1",
+            "port": 18080
+        },
+        "storage": {
+            "host": "127.0.0.1",
+            "port": 19199
+        },
+        "ui": {
+            "enabled": false
+        },
+        "singleProjectMode": true
     },
-    "singleProjectMode": true
-  },
-  "functions": [
-    {
-      "source": "functions",
-      "codebase": "default",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log"
-      ]
-    }
-  ]
+    "functions": [
+        {
+            "source": "functions",
+            "codebase": "default",
+            "ignore": ["node_modules", ".git", "firebase-debug.log", "firebase-debug.*.log"]
+        }
+    ]
 }

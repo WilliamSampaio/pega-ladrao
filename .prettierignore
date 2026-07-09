@@ -1,0 +1,13 @@
+node_modules
+functions/node_modules
+dist
+dist-ssr
+.firebase
+coverage
+*.log
+*.local
+firestore-debug.log
+firebase-debug.log
+README.md
+package-lock.json
+functions/package-lock.json

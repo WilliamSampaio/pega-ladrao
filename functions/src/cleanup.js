@@ -139,10 +139,12 @@ async function deleteAcessos({ db, comprovanteId, accessBatchSize }) {
 }
 
 function isNotFoundError(error) {
-    return error?.code === 404
-        || error?.code === 'ENOENT'
-        || error?.code === 'storage/object-not-found'
-        || error?.message?.toLowerCase().includes('not found');
+    return (
+        error?.code === 404 ||
+        error?.code === 'ENOENT' ||
+        error?.code === 'storage/object-not-found' ||
+        error?.message?.toLowerCase().includes('not found')
+    );
 }
 
 function logInfo(logger, message, payload) {
